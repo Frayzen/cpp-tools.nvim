@@ -9,7 +9,7 @@ cpp-tools.nvim is a plugin that aims to keep header and source files synchronize
 
 Example of configuration using lazy:
 
-```
+```lua
 return {
     "Frayzen/cpp-tools.nvim",
     config = function()

@@ -20,11 +20,11 @@ local qs_cc = [[
 ]]
 
 local function get_method(buffer, qs, base_namespace)
-    local parser = ts.get_parser(buffer)
+    local parser = vim.treesitter.get_parser(buffer)
     local tree = parser:parse()[1]
     local root = tree:root()
     local lang = parser:lang()
-    local query = ts.query.parse(lang, qs)
+    local query = vim.treesitter.query.parse(lang, qs)
     local methods = {}
     for _, match, _ in query:iter_matches(root, buffer) do
         local meth, class = {}, nil
@@ -102,7 +102,7 @@ function M.retrieve_methods()
 end
 
 function M.get_hovered()
-    local node = ts.get_node()
+    local node = vim.treesitter.get_node()
     while node and node:type() ~= "function_definition" do
         node = node:parent()
     end

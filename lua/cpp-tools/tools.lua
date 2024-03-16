@@ -10,6 +10,9 @@ function mth_to_str(meth, simple)
         end
     end
     full = full .. meth["name"] .. "(" .. meth["params"] .. ")"
+    if meth["const"] then
+        full = full .. " const"
+    end
     return full
 end
 
@@ -62,8 +65,9 @@ function parse_meth(node, buffer, base_namespace)
     local namespace = "([a-zA-Z_:]-)"
     local name = "([a-zA-Z_]+)%("
     local params = "(.*)%)"
-    local pattern = string.format("^%s%s%s%s", type, namespace, name, params)
-    _, _, type, namespace, name, params = string.find(text, pattern)
+    local const = "%s*([const]*)"
+    local pattern = string.format("^%s%s%s%s%s", type, namespace, name, params, const)
+    _, _, type, namespace, name, params, const = string.find(text, pattern)
     if name == nil then
         error("Error parsing " .. text, nil)
     end
@@ -84,6 +88,7 @@ function parse_meth(node, buffer, base_namespace)
         namespace = namespace,
         line = node:start(),
         params = params,
+        const = const ~= ""
     }
 end
 

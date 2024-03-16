@@ -1,8 +1,15 @@
+# Overview
+
+cpp-tools.nvim is a plugin that aims to keep headers and source files synchronized among cpp-projects.
+
+![Implement example](images/implement.png)
+![Refactor example](images/refactor.png)
+
 # Configuration
 
-Sample configuration:
+Example of configuration using lazy:
 
-```
+```lua
 return {
     "Frayzen/cpp-tools.nvim",
     config = function()

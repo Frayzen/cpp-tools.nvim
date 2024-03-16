@@ -2,8 +2,8 @@
 
 cpp-tools.nvim is a plugin that aims to keep header and source files synchronized among cpp-projects.
 
-![Refactor example] (images/refactor.png)
-![Implement example] (images/implement.png)
+![Refactor example](images/refactor.png)
+![Implement example](images/implement.png)
 
 # Configuration
 

@@ -10,9 +10,9 @@ function mth_to_str(meth, simple)
         end
     end
     full = full .. meth["name"] .. "(" .. meth["params"] .. ")"
-    if meth["const"] then
-        full = full .. " const"
-    end
+    -- if meth["const"] then
+    --     full = full .. " const"
+    -- end
     return full
 end
 
@@ -88,7 +88,7 @@ function parse_meth(node, buffer, base_namespace)
         namespace = namespace,
         line = node:start(),
         params = params,
-        const = const ~= ""
+        const = const == "const",
     }
 end
 

@@ -29,6 +29,7 @@ function M.refactor_method()
         return
     end
     require("cpp-tools.menu").show_menu(choices, function(sel)
+        method.static = sel["static"]
         local replacment = mth_to_str(method, true) .. ";"
         local line = sel["line"]
         vim.api.nvim_buf_set_lines(hh_buf, line, line + 1, false, { replacment })

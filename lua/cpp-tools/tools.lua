@@ -1,8 +1,11 @@
 function mth_to_str(meth, simple)
     disable_class = disable_class or false
     local full = ""
+    if meth["static"] and simple then
+        full = full .. "static "
+    end
     if meth["type"] ~= "" then
-        full = meth["type"] .. " "
+        full = full .. meth["type"] .. " "
     end
     if not simple then
         if #meth["namespace"] ~= 0 then
@@ -10,9 +13,9 @@ function mth_to_str(meth, simple)
         end
     end
     full = full .. meth["name"] .. "(" .. meth["params"] .. ")"
-    -- if meth["const"] then
-    --     full = full .. " const"
-    -- end
+    if meth["const"] then
+        full = full .. " const"
+    end
     return full
 end
 
@@ -81,6 +84,11 @@ function parse_meth(node, buffer, base_namespace)
         end
         table.remove(namespace, 1)
     end
+    local static = false
+    if string.match(type, "^static ") then
+        type = string.sub(type, 8)
+        static = true
+    end
     return {
         type = type,
         class = namespace[#namespace],
@@ -88,6 +96,7 @@ function parse_meth(node, buffer, base_namespace)
         namespace = namespace,
         line = node:start(),
         params = params,
+        static = static,
         const = const == "const",
     }
 end

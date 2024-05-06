@@ -1,19 +1,22 @@
-function mth_to_str(meth, simple)
-    disable_class = disable_class or false
+function mth_to_str(meth, show)
+    show = show or {}
+    local const = show.const or false
+    local namespace = show.namespace or false
+    local static = show.static or false
     local full = ""
-    if meth["static"] and simple then
+    if meth["static"] and static then
         full = full .. "static "
     end
     if meth["type"] ~= "" then
         full = full .. meth["type"] .. " "
     end
-    if not simple then
+    if namespace then
         if #meth["namespace"] ~= 0 then
             full = full .. table.concat(meth["namespace"], "::") .. "::"
         end
     end
     full = full .. meth["name"] .. "(" .. meth["params"] .. ")"
-    if meth["const"] then
+    if meth["const"] and const then
         full = full .. " const"
     end
     return full
@@ -105,12 +108,13 @@ function get_current_namespace()
     return get_namespace_list("", ts.get_node(), vim.api.nvim_get_current_buf())
 end
 
+-- a : {b: c} => {key: a, b: c}
 function table_to_list(tbl, check)
     local ret = {}
     for k, v in pairs(tbl) do
         if not check or check(k, v) then
             local val = v
-            val["key"] = k
+            val.key = k
             table.insert(ret, val)
         end
     end

@@ -42,7 +42,7 @@ local function get_method(buffer, qs, base_namespace)
                 meth["class"] = class
                 table.insert(meth["namespace"], class)
             end
-            methods[mth_to_str(meth, true)] = meth
+            methods[mth_to_str(meth)] = meth
         end
     end
     return methods
@@ -63,7 +63,14 @@ function M.retrieve_unimplemented(hh_buffer, cc_buffer)
     for k, _ in pairs(implemented) do
         all[k] = nil
     end
-    return all
+    local ret = {}
+    for k, _ in pairs(all) do
+        ret[mth_to_str(all[k], {
+            static = true,
+            const = true,
+        })] = all[k]
+    end
+    return ret
 end
 
 function M.retrieve_methods()
@@ -91,7 +98,7 @@ function M.retrieve_methods()
             if #impl_lines ~= 0 then
                 table.insert(impl_lines, "")
             end
-            table.insert(impl_lines, mth_to_str(v))
+            table.insert(impl_lines, mth_to_str(v, { namespace = true }))
             table.insert(impl_lines, "{")
             table.insert(impl_lines, "	")
             table.insert(impl_lines, "}")

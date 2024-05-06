@@ -20,7 +20,6 @@ function M.refactor_method()
     end
 
     local unimplemented = require("cpp-tools.method_retriever").retrieve_unimplemented(hh_buf, cc_buf)
-    print(vim.inspect(method))
     local choices = table_to_list(unimplemented, function(_, v)
         return v["class"] == method["class"]
     end)
@@ -29,9 +28,9 @@ function M.refactor_method()
         return
     end
     require("cpp-tools.menu").show_menu(choices, function(sel)
-        method.static = sel["static"]
-        local replacment = mth_to_str(method, true) .. ";"
-        local line = sel["line"]
+        method.static = sel.static
+        local replacment = mth_to_str(method, { static = true, const = true }) .. ";"
+        local line = sel.line
         vim.api.nvim_buf_set_lines(hh_buf, line, line + 1, false, { replacment })
         vim.api.nvim_buf_call(hh_buf, function()
             vim.cmd(":w")

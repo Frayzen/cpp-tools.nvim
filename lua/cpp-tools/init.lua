@@ -14,4 +14,8 @@ function M.refactor()
     require("cpp-tools.method_refactorer").refactor_method()
 end
 
+function M.create()
+    require("cpp-tools.method_creator").create_method()
+end
+
 return M

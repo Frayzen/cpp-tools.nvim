@@ -3,23 +3,23 @@ function mth_to_str(meth, show)
     local const = show.const or false
     local namespace = show.namespace or false
     local static = show.static or false
-    local full = ""
+    local builder = ""
     if meth["static"] and static then
-        full = full .. "static "
+        builder = builder .. "static "
     end
     if meth["type"] ~= "" then
-        full = full .. meth["type"] .. " "
+        builder = builder .. meth["type"] .. " "
     end
     if namespace then
         if #meth["namespace"] ~= 0 then
-            full = full .. table.concat(meth["namespace"], "::") .. "::"
+            builder = builder .. table.concat(meth["namespace"], "::") .. "::"
         end
     end
-    full = full .. meth["name"] .. "(" .. meth["params"] .. ")"
+    builder = builder .. meth["name"] .. "(" .. meth["params"] .. ")"
     if meth["const"] and const then
-        full = full .. " const"
+        builder = builder .. " const"
     end
-    return full
+    return builder
 end
 
 function get_hh_buff()
@@ -80,12 +80,12 @@ function parse_meth(node, buffer, base_namespace)
     if namespace ~= "" then
         namespace = namespace:sub(1, -3)
     end
-    namespace = get_namespace_list(namespace, node, buffer)
+    local namespace_list = get_namespace_list(namespace, node, buffer)
     for _, v in pairs(base_namespace) do
-        if namespace[1] ~= v then
+        if namespace_list[1] ~= v then
             return nil
         end
-        table.remove(namespace, 1)
+        table.remove(namespace_list, 1)
     end
     local static = false
     if string.match(type, "^static ") then
@@ -94,9 +94,9 @@ function parse_meth(node, buffer, base_namespace)
     end
     return {
         type = type,
-        class = namespace[#namespace],
+        class = namespace_list[#namespace_list],
         name = name,
-        namespace = namespace,
+        namespace = namespace_list,
         line = node:start(),
         params = params,
         static = static,
